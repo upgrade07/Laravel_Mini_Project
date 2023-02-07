@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\users;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,11 +27,16 @@ Route::get('/create', function () {
     return view('create');
 });
 
-Route::get('/list', [users::class,'list']);
+Route::get('/list', [users::class, 'list']);
 
-Route::get('/home', [users::class,'home']);
+Route::get('/home', [users::class, 'home']);
 
-Route::post('/login_submit', [users::class,'login_submit']);
 
-Route::post('/create_submit', [users::class,'create_submit']);
 
+Route::group(['middleware' => ['LogCheck']], function () {
+    Route::post('/login_submit', [users::class, 'login_submit']);
+
+    Route::post('/create_submit', [users::class, 'create_submit']);
+
+    Route::get('/list', [users::class, 'list']);
+});
